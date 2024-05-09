@@ -1,0 +1,22 @@
+{
+  "name": "p2p-physics",
+  "private": true,
+  "workspaces": [
+    "services/*"
+  ],
+  "scripts": {
+    "dev:cl": "bun run --cwd services/cl dev",
+    "dev:sv": "bun run --cwd services/sv dev",
+    "build:cl": "bun run --cwd services/cl build",
+    "start:sv": "bun run --cwd services/sv start"
+  },
+  "dependencies": {
+    "@solid-primitives/websocket": "^1.2.2",
+    "@types/uuid": "^9.0.8",
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "sass": "^1.77.0"
+  }
+}
