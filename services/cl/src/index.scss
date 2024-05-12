@@ -48,8 +48,18 @@ body {
 
     .player {
       width: 32px;
-      height: 32px;
-      background-color: coral;
+      height: 58px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .player:nth-child(2n) {
+      background-image: url("al.png");
+    }
+
+    .player:nth-child(2n-1) {
+      background-image: url("sa.png");
     }
   }
 }
