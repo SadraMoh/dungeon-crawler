@@ -5,23 +5,34 @@ import {
   defaultClientMessageSchema,
   movePlayerMessageSchema,
   userJoinMessageSchema,
+  ROOM_NAME,
+  TICK_DELAY,
+  PLAYER_SPEED,
 } from "shared";
 import { reviver } from "../utils";
 import { world } from "../state";
-import { ROOM_NAME } from "../constants";
 import { server } from "..";
-
-export const TICK_RATE = 1000;
 
 /**
  * when the server starts
  */
-export function start() {}
+export function start() {
+  // start update loop
+  setInterval(() => update(Date.now()), TICK_DELAY);
+}
 
 /*
  * runs on every server cycle
  */
-export function update() {}
+export function update(startTime: number) {
+  const delta = Date.now() - startTime;
+
+  // update player positions
+  server.publish(
+    ROOM_NAME,
+    JSON.stringify(createUpdatePlayersMessage(world.players))
+  );
+}
 
 /**
  * when the server receives a message from a user
@@ -40,12 +51,6 @@ export const message = (ws: ServerWebSocket<unknown>, msg: string | Buffer) => {
         x: 256,
         y: 256,
       });
-
-      server.publish(
-        ROOM_NAME,
-        JSON.stringify(createUpdatePlayersMessage(world.players))
-      );
-
       break;
 
     case MessageVariant.MovePlayer:
@@ -61,14 +66,8 @@ export const message = (ws: ServerWebSocket<unknown>, msg: string | Buffer) => {
           `Player with name [${toBeUpdatedPlayer}] was not found.`
         );
 
-      toBeUpdatedPlayer.x = movePlayerMessage.data.x;
-      toBeUpdatedPlayer.y = movePlayerMessage.data.y;
-
-      server.publish(
-        ROOM_NAME,
-        JSON.stringify(createUpdatePlayersMessage(world.players))
-      );
-
+      toBeUpdatedPlayer.x += Math.sign(movePlayerMessage.data.x) * PLAYER_SPEED;
+      toBeUpdatedPlayer.y += Math.sign(movePlayerMessage.data.y) * PLAYER_SPEED;
       break;
 
     default:

@@ -1,7 +1,7 @@
 export * from "./message";
 
-export type { Position } from "./position";
-export { positionSchema } from "./position";
+export type { Vec2 } from "./vec2";
+export { vec2 } from "./vec2";
 
 export type { Player } from "./player";
 export { playerSchema } from "./player";

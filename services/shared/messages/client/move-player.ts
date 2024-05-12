@@ -3,17 +3,16 @@ import {
   MessageVariant,
   createClientMessage,
   createClientMessageSchema,
-  positionSchema,
-  Position,
+  vec2,
+  Vec2,
 } from "../../types";
 
-export const movePlayerMessageSchema =
-  createClientMessageSchema(positionSchema);
+export const movePlayerMessageSchema = createClientMessageSchema(vec2);
 
 export type MovePlayerMessageSchema = z.infer<typeof movePlayerMessageSchema>;
 
-export const createMovePlayerMessage = (user: string, x: number, y: number) =>
+export const createMovePlayerMessage = (user: string, dx: number, dy: number) =>
   createClientMessage(user, MessageVariant.MovePlayer, {
-    x,
-    y,
-  } satisfies Position);
+    x: dx,
+    y: dy,
+  } satisfies Vec2);

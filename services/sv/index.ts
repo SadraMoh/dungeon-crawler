@@ -1,4 +1,4 @@
-import { ROOM_NAME } from "./constants";
+import { ROOM_NAME } from "shared/constants";
 import { message, start } from "./game";
 
 const SV_PORT = process.env.SV_PORT ?? 3000;

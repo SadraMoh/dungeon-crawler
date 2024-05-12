@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { positionSchema } from "./position";
+import { vec2 } from "./vec2";
 
 export const playerSchema = z
   .object({
     name: z.string(),
   })
-  .and(positionSchema);
+  .and(vec2);
 
 export type Player = z.infer<typeof playerSchema>;

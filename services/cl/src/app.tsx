@@ -1,4 +1,4 @@
-import { Index, Show, createEffect } from "solid-js";
+import { Index, Show } from "solid-js";
 import { listen, send, wsStatus } from "./ws";
 import { currentPlayerId, player, setWorld, world } from "./state";
 import PlayerSprite from "./player-sprite";
@@ -13,10 +13,6 @@ function App() {
 
   listen(updatePlayersMessageSchema, ({ data }) => {
     setWorld("players", data);
-  });
-
-  createEffect(() => {
-    world.players.forEach(({ x, y }) => console.log("update", x, y));
   });
 
   return (
