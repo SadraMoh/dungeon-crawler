@@ -1,12 +1,13 @@
 import { produce } from "solid-js/store";
 import { setWorld, player } from "./state";
+import { send } from "./ws";
+import { createMovePlayerMessage } from "shared";
 
 const inputHandler = (e: KeyboardEvent) => {
   setWorld(
     "players",
     produce((players) => {
       const maybePlayer = player();
-      console.log(e.code, maybePlayer?.x, maybePlayer?.y);
 
       if (!maybePlayer) {
         return;
@@ -25,6 +26,10 @@ const inputHandler = (e: KeyboardEvent) => {
       } else if (e.code === "KeyS") {
         players[playerIndex].y += 5;
       }
+
+      send(
+        createMovePlayerMessage(maybePlayer.name, maybePlayer.x, maybePlayer.y)
+      );
     })
   );
 };

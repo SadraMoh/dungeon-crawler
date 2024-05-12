@@ -3,10 +3,13 @@ import {
   MessageVariant,
   createUpdatePlayersMessage,
   defaultClientMessageSchema,
+  movePlayerMessageSchema,
   userJoinMessageSchema,
 } from "shared";
 import { reviver } from "../utils";
 import { world } from "../state";
+import { ROOM_NAME } from "../constants";
+import { server } from "..";
 
 export const TICK_RATE = 1000;
 
@@ -38,7 +41,33 @@ export const message = (ws: ServerWebSocket<unknown>, msg: string | Buffer) => {
         y: 256,
       });
 
-      ws.send(JSON.stringify(createUpdatePlayersMessage(world.players)));
+      server.publish(
+        ROOM_NAME,
+        JSON.stringify(createUpdatePlayersMessage(world.players))
+      );
+
+      break;
+
+    case MessageVariant.MovePlayer:
+      const movePlayerMessage = movePlayerMessageSchema.parse(message);
+      console.log("[EVENT]", MessageVariant.MovePlayer, movePlayerMessage.data);
+
+      const toBeUpdatedPlayer = world.players.find(
+        (user) => user.name === movePlayerMessage.user
+      );
+
+      if (!toBeUpdatedPlayer)
+        throw new Error(
+          `Player with name [${toBeUpdatedPlayer}] was not found.`
+        );
+
+      toBeUpdatedPlayer.x = movePlayerMessage.data.x;
+      toBeUpdatedPlayer.y = movePlayerMessage.data.y;
+
+      server.publish(
+        ROOM_NAME,
+        JSON.stringify(createUpdatePlayersMessage(world.players))
+      );
 
       break;
 

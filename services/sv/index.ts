@@ -1,8 +1,9 @@
+import { ROOM_NAME } from "./constants";
 import { message, start } from "./game";
 
 const SV_PORT = process.env.SV_PORT ?? 3000;
 
-Bun.serve({
+export const server = Bun.serve({
   fetch(req, server) {
     // upgrade the request to a WebSocket
     if (server.upgrade(req)) {
@@ -15,6 +16,7 @@ Bun.serve({
     message: message,
     open: (ws) => {
       console.log("[OPEN]");
+      ws.subscribe(ROOM_NAME);
     },
     close: (ws) => console.log("[CLOSE]"),
     drain: (ws) => console.log("[DRAIN]"),

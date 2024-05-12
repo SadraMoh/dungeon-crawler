@@ -4,6 +4,7 @@ import { z } from "zod";
 export enum MessageVariant {
   // client sent
   UserJoin = "user-join",
+  MovePlayer = "move-player",
 
   // server sent
   UpdatePlayers = "update-players",

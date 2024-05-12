@@ -12,8 +12,8 @@ export const movePlayerMessageSchema =
 
 export type MovePlayerMessageSchema = z.infer<typeof movePlayerMessageSchema>;
 
-export const createUserJoinMessage = (user: string, x: number, y: number) =>
-  createClientMessage(user, MessageVariant.UserJoin, {
+export const createMovePlayerMessage = (user: string, x: number, y: number) =>
+  createClientMessage(user, MessageVariant.MovePlayer, {
     x,
     y,
   } satisfies Position);
