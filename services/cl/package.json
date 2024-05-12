@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "nipplejs": "^0.10.2",
     "shared": "workspace:*",
     "solid-joystick": "^1.2.0",
     "solid-js": "^1.8.15"
