@@ -1,10 +1,12 @@
 import type { ServerWebSocket } from "bun";
 import {
   MessageVariant,
+  createUpdatePlayersMessage,
   defaultClientMessageSchema,
   userJoinMessageSchema,
 } from "shared";
 import { reviver } from "../utils";
+import { world } from "../state";
 
 export const TICK_RATE = 1000;
 
@@ -29,6 +31,15 @@ export const message = (ws: ServerWebSocket<unknown>, msg: string | Buffer) => {
     case MessageVariant.UserJoin:
       const userJoinMessage = userJoinMessageSchema.parse(message);
       console.log("[EVENT]", MessageVariant.UserJoin, userJoinMessage.data);
+
+      world.players.push({
+        name: userJoinMessage.user,
+        x: 256,
+        y: 256,
+      });
+
+      ws.send(JSON.stringify(createUpdatePlayersMessage(world.players)));
+
       break;
 
     default:

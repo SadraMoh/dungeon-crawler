@@ -5,9 +5,9 @@ import {
   createClientMessageSchema,
 } from "../../types";
 
-export const userJoinMessageSchema = createClientMessageSchema(z.string());
+export const userJoinMessageSchema = createClientMessageSchema(z.undefined());
 
 export type UserJoinMessage = z.infer<typeof userJoinMessageSchema>;
 
 export const createUserJoinMessage = (user: string) =>
-  createClientMessage(user, MessageVariant.UserJoin, z.string());
+  createClientMessage(user, MessageVariant.UserJoin);

@@ -8,6 +8,7 @@ Bun.serve({
     if (server.upgrade(req)) {
       return; // do not return a Response
     }
+
     return new Response("Upgrade failed :(", { status: 500 });
   },
   websocket: {
