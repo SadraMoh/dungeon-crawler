@@ -8,14 +8,14 @@ import {
   createUserJoinMessage,
   updatePlayersMessageSchema,
 } from "shared";
-import { handleInputs, inputs } from "./input";
+import { handleInputs, inputs, keys } from "./input";
 import { produce } from "solid-js/store";
 import gsap from "gsap";
+import { Joystick, PointerPlugin, GamepadPlugin } from "solid-joystick";
 
 function App() {
   const join = () => {
     send(createUserJoinMessage(currentPlayerId()));
-    handleInputs();
   };
 
   listen(updatePlayersMessageSchema, ({ data }) => {
@@ -65,6 +65,15 @@ function App() {
     );
   });
 
+  let isFirst = true;
+  listen(updatePlayersMessageSchema, () => {
+    if (player() === undefined || isFirst === false) return;
+    isFirst = true;
+
+    // inputs
+    handleInputs();
+  });
+
   return (
     <main class="container">
       <p>Connection: {wsStatus()}</p>
@@ -77,6 +86,43 @@ function App() {
             }}
           </Index>
         </section>
+
+        <div
+          style={{
+            width: "200px",
+            height: "200px",
+            margin: "auto",
+            "margin-top": "24px",
+          }}
+        >
+          <Joystick
+            onMove={({ offset }: any) => {
+              const { x, y } = offset.percentage;
+
+              if (Math.abs(x) > 0.2) {
+                if (Math.sign(x) > 0) keys.d = true;
+                else keys.a = true;
+              } else keys.a = keys.d = false;
+
+              if (Math.abs(y) > 0.2) {
+                if (Math.sign(y) > 0) keys.s = true;
+                else keys.w = true;
+              } else keys.w = keys.s = false;
+            }}
+            plugins={[PointerPlugin(), GamepadPlugin()]}
+            handleProps={{
+              style: {
+                background: "red",
+                width: "35%",
+                height: "35%",
+                "border-radius": "50%",
+              },
+            }}
+            baseProps={{
+              style: { background: "black", "border-radius": "50%" },
+            }}
+          />
+        </div>
       </Show>
     </main>
   );
