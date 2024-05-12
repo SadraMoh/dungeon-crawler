@@ -13,6 +13,7 @@
   "dependencies": {
     "@solid-primitives/websocket": "^1.2.2",
     "@types/uuid": "^9.0.8",
+    "gsap": "^3.12.5",
     "uuid": "^9.0.1",
     "zod": "^3.22.4"
   },
