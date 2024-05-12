@@ -1,7 +1,11 @@
 import { produce } from "solid-js/store";
 import { setWorld, player } from "./state";
 import { send } from "./ws";
-import { PLAYER_SPEED, createMovePlayerMessage } from "shared";
+import {
+  MovePlayerPayload,
+  PLAYER_SPEED,
+  createMovePlayerMessage,
+} from "shared";
 
 let isInputBeingHandled = false;
 
@@ -11,6 +15,9 @@ export const keys = {
   w: false,
   s: false,
 };
+
+export const inputs: MovePlayerPayload[] = [];
+export let sequenceNumber = 0;
 
 const inputHandler = (e: KeyboardEvent, type: "up" | "down") => {
   const isPressed = type === "down";
@@ -62,22 +69,27 @@ addEventListener("update", () => {
       let y = 0;
 
       if (keys.a) {
-        players[playerIndex].x -= PLAYER_SPEED;
         x = -1;
       } else if (keys.d) {
-        players[playerIndex].x += PLAYER_SPEED;
         x = 1;
       }
 
       if (keys.w) {
-        players[playerIndex].y -= PLAYER_SPEED;
         y = -1;
       } else if (keys.s) {
-        players[playerIndex].y += PLAYER_SPEED;
         y = 1;
       }
 
-      send(createMovePlayerMessage(maybePlayer.name, x, y));
+      inputs.push({
+        x,
+        y,
+        sid: sequenceNumber,
+      });
+
+      players[playerIndex].x += Math.sign(x) * PLAYER_SPEED;
+      players[playerIndex].y += Math.sign(y) * PLAYER_SPEED;
+
+      send(createMovePlayerMessage(maybePlayer.name, x, y, sequenceNumber++));
     })
   );
 });

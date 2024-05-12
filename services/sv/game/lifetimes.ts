@@ -48,6 +48,7 @@ export const message = (ws: ServerWebSocket<unknown>, msg: string | Buffer) => {
         name: userJoinMessage.user,
         x: 256,
         y: 256,
+        sid: 0,
       });
       break;
 
@@ -64,6 +65,8 @@ export const message = (ws: ServerWebSocket<unknown>, msg: string | Buffer) => {
 
       toBeUpdatedPlayer.x += Math.sign(movePlayerMessage.data.x) * PLAYER_SPEED;
       toBeUpdatedPlayer.y += Math.sign(movePlayerMessage.data.y) * PLAYER_SPEED;
+      toBeUpdatedPlayer.sid = movePlayerMessage.data.sid;
+
       break;
 
     default:
