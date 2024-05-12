@@ -44,8 +44,6 @@ export const message = (ws: ServerWebSocket<unknown>, msg: string | Buffer) => {
   switch (message.type) {
     case MessageVariant.UserJoin:
       const userJoinMessage = userJoinMessageSchema.parse(message);
-      console.log("[EVENT]", MessageVariant.UserJoin, userJoinMessage.data);
-
       world.players.push({
         name: userJoinMessage.user,
         x: 256,
@@ -55,8 +53,6 @@ export const message = (ws: ServerWebSocket<unknown>, msg: string | Buffer) => {
 
     case MessageVariant.MovePlayer:
       const movePlayerMessage = movePlayerMessageSchema.parse(message);
-      console.log("[EVENT]", MessageVariant.MovePlayer, movePlayerMessage.data);
-
       const toBeUpdatedPlayer = world.players.find(
         (user) => user.name === movePlayerMessage.user
       );
