@@ -8,7 +8,7 @@ import {
   createUserJoinMessage,
   updatePlayersMessageSchema,
 } from "shared";
-import { handleInputs, inputs, sequenceNumber } from "./input";
+import { handleInputs, inputs } from "./input";
 import { produce } from "solid-js/store";
 import gsap from "gsap";
 
